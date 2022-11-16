@@ -42,11 +42,11 @@ abstract class Model extends Eloquent {
      */
     public function getTable() {
         if(isset($this->table)) {
-            $prefix =  $this->getConnection()->db->prefix;
-            return substr($this->table, 0, strlen($prefix)) === $prefix ? $this->table : $prefix . $this->table;
+            return substr($this->table, 0, strlen($this->db_prefix)) === $this->db_prefix ? $this->table : $this->db_prefix . $this->table;
         }
 
-        return parent::getTable();
+        $this->table =  $this->db_prefix.parent::getTable();
+        return $this->table;
     }
 
     /**
