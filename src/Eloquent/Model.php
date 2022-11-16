@@ -41,13 +41,12 @@ abstract class Model extends Eloquent {
      * @return string
      */
     public function getTable() {
-        if ( isset( $this->table ) ) {
-            return $this->db_prefix . $this->table;
+        if(isset($this->table)) {
+            $prefix =  $this->getConnection()->db->prefix;
+            return substr($this->table, 0, strlen($prefix)) === $prefix ? $this->table : $prefix . $this->table;
         }
 
-        $table = str_replace( '\\', '', snake_case( str_plural( class_basename( $this ) ) ) );
-
-        return $this->db_prefix . $table ;
+        return parent::getTable();
     }
 
     /**
